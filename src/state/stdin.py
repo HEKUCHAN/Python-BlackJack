@@ -26,19 +26,20 @@ class Stdin:
         word: str,
         response: List[str] = ["Yes", "No"]
     ) -> Union[str, None]:
-        response_word: str = cls.input(
-            f"{word} {response[0]}/{response[1]} : "
-        ).lower()
+        while True:
+            response_word: str = cls.input(
+                f"{word} {response[0]}/{response[1]} : "
+            ).lower()
 
-        if (
-            response_word == response[0].lower() or
-            response_word == response[0][0].lower()
-        ):
-            return True
-        elif (
-            response_word == response[1].lower() or
-            response_word == response[1][0].lower()
-        ):
-            return False
-        else:
-            print("指定された文字を入力してください！")
+            if (
+                response_word == response[0].lower() or
+                response_word == response[0][0].lower()
+            ):
+                return True
+            elif (
+                response_word == response[1].lower() or
+                response_word == response[1][0].lower()
+            ):
+                return False
+            else:
+                print("指定された文字を入力してください！")

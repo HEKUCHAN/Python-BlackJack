@@ -31,11 +31,12 @@ class Game:
         self
     ) -> None:
         self.player_name: str = input("名前を入力してください : ")
-        self.player: Player = Player(self.player_name)
+        self.player: Player = Player(self.player_name, 5000)
         self.dealer: Dealer = Dealer("Dealer")
         self.deck: Deck = Deck()
         self.round: int = 0
         self.status: Status = Status.NONE
+        self.round_bet = 0
 
     def init(self) -> None:
         self.status = Status.INIT
@@ -51,6 +52,21 @@ class Game:
         self.status = Status.START
         self.round += 1
 
+        if self.player.money <= 1000:
+            self.player.money = 1000
+
+        print(f"{self.player.name}の所持金は{self.player.money}円です")
+
+        bet = Stdin.input("いくらベットしますか？ : ", num=True)
+
+        while True:
+            if bet > self.player.money:
+                print("お金が足りません。")
+            else:
+                self.round_bet = bet
+                self.player.money -= bet
+                break
+
         self.draw_entities_new_cards()
 
         victory_type = self.check_blackjack()
@@ -60,7 +76,7 @@ class Game:
             victory_type == VictoryType.DEALER_WIN or
             victory_type == VictoryType.DRAW
         ):
-            self.end()
+            self.end(victory_type)
         else:
             self.next()
 
@@ -69,9 +85,10 @@ class Game:
     def restart(self) -> None:
         self.status = Status.RESTART
 
-        self.player: Player = Player(self.player_name)
+        self.player: Player = Player(self.player_name, self.player.money)
         self.dealer: Dealer = Dealer("Dealer")
         self.deck: Deck = Deck()
+        self.round_bet = 0
 
         self.start()
 
@@ -90,7 +107,7 @@ class Game:
                 victory_type == VictoryType.PLAYER_WIN or
                 victory_type == VictoryType.DEALER_WIN
             ):
-                self.end()
+                self.end(victory_type)
             else:
                 self.next()
         else:
@@ -101,13 +118,17 @@ class Game:
 
         self.dealer.show_all_cards()
 
+        print(self.dealer.is_more_17(),
+            not self.dealer.is_bust(),
+            self.dealer.count_cards() > self.player.count_cards())
+
         if (
-            not self.dealer.is_bust  and
-            self.dealer.is_more_17() and
+            self.dealer.is_more_17()   and
+            not self.dealer.is_bust()  and
             self.dealer.count_cards() > self.player.count_cards()
         ):
             print("ディーラーの勝利！！")
-            self.end()
+            self.end(VictoryType.DEALER_WIN)
         else:
             while True:
                 self.dealer_draw()
@@ -119,11 +140,16 @@ class Game:
                     victory_type == VictoryType.DEALER_WIN or
                     victory_type == VictoryType.DRAW
                 ):
-                    self.end()
+                    self.end(victory_type)
                     break
 
-    def end(self) -> None:
+    def end(self, victory_type) -> None:
         self.status = Status.END
+
+        if victory_type == VictoryType.PLAYER_WIN:
+            self.player.money += self.round_bet * 2
+        elif victory_type == VictoryType.DRAW:
+            self.player.money += self.round_bet
 
         if Stdin.get_response("もう一度プレイしますか？"):
             self.restart()
@@ -173,7 +199,7 @@ class Game:
             self.show_entities_all_cards()
 
             print("ブラックジャック！")
-            print("あなたの勝利！！")
+            print(f"{self.player.name}の勝利！！")
 
             return VictoryType.PLAYER_WIN
         else:
@@ -189,7 +215,7 @@ class Game:
         elif self.player.is_21():
             self.player.show_cards()
             print("ブラックジャック！")
-            print("あなたの勝利！！")
+            print(f"{self.player.name}の勝利！！")
 
             return VictoryType.DEALER_WIN
         else:
@@ -198,11 +224,11 @@ class Game:
     def check_dealer_win(self):
         time.sleep(2)
         self.dealer.show_all_cards()
-        time.sleep(2)
+        time.sleep(1)
 
         if self.dealer.is_bust():
             print("ディーラーがバーストした！")
-            print("あなたの勝利！")
+            print(f"{self.player.name}の勝利！")
 
             return VictoryType.PLAYER_WIN
         elif self.dealer.is_more_17():
@@ -220,7 +246,7 @@ class Game:
                 return VictoryType.DEALER_WIN
             elif self.player.count_cards() > self.dealer.count_cards():
                 self.player.show_cards()
-                print("あなたの勝利！！")
+                print(f"{self.player.name}の勝利！！")
                 self.player.count_cards()
 
                 return VictoryType.PLAYER_WIN
@@ -248,4 +274,3 @@ class Game:
         self.player = Player(
             name=self.player.name
         )
-
