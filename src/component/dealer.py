@@ -38,14 +38,14 @@ class Dealer(Entity):
 
         return count
 
-    def hide_has_ace(self):
+    def hide_has_ace(self) -> bool:
         for card in self.hide_hand_cards:
             if card.number == Number.ACE:
                 return True
         else:
             return False
 
-    def hide_count_ace(self):
+    def hide_count_ace(self) -> int:
         count = 0
 
         for card in self.hide_hand_cards:
