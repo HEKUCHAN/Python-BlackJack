@@ -52,13 +52,13 @@ class Card:
     @property
     def number_name(self) -> str:
         if self.number == Number.KING:
-            return "♚ (King)"
+            return "♚"
         elif self.number == Number.QUEEN:
-            return "♛ (Queen)"
+            return "♛"
         elif self.number == Number.JACK:
-            return "J (Jack)"
+            return "J"
         elif self.number == Number.ACE:
-            return "A (ACE)"
+            return "A"
         else:
             return str(self.number.value)
 

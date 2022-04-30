@@ -1,11 +1,10 @@
-from cards import Deck
+from state import Game
+
 
 def main():
-    deck = Deck()
-    for card in deck.cards:
-        print(card)
-    card = deck.draw()
-    print(str(card))
+    game = Game()
+
+    game.init()
 
 if __name__ == "__main__":
     main()
