@@ -118,10 +118,6 @@ class Game:
 
         self.dealer.show_all_cards()
 
-        print(self.dealer.is_more_17(),
-            not self.dealer.is_bust(),
-            self.dealer.count_cards() > self.player.count_cards())
-
         if (
             self.dealer.is_more_17()   and
             not self.dealer.is_bust()  and
