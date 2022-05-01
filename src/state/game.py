@@ -96,7 +96,7 @@ class Game:
         self.status = Status.NEXT
 
         self.show_entities_cards()
-        response: str = Stdin.get_response("HIT or STAND : ", ["Hit", "Stand"])
+        response: str = Stdin.get_response("HIT or STAND", ["Hit", "Stand"])
 
         if response:
             self.player_draw()
