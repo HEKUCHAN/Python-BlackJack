@@ -211,7 +211,7 @@ class Game:
             print("バースト！")
             print("ディーラーの勝利！！")
 
-            return VictoryType.PLAYER_WIN
+            return VictoryType.DEALER_WIN
         elif self.player.is_21():
             self.player.show_cards()
             print("ブラックジャック！")
