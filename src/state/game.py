@@ -10,10 +10,10 @@ from component import Player, Dealer
 
 
 class VictoryType(Enum):
-    PLAYER_WIN = 1
-    DEALER_WIN = 2
-    DRAW = 3
-    NONE = 4
+    PLAYER_WIN = 0
+    DEALER_WIN = 1
+    DRAW = 2
+    NONE = 3
 
 
 class Status(Enum):
