@@ -29,7 +29,7 @@ class Deck:
         self.cards = random.shuffle(self.cards)
 
     @classmethod
-    def shuffle(cls, cards: List[Any]) -> List[Card]:
+    def shuffle(cls, cards: List[Any]) -> List[Any]:
         return random.shuffle(cards)
 
     @classmethod
